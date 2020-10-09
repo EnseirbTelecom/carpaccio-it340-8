@@ -1,12 +1,13 @@
 var request = require('request'),
 	postData = {},
 	postConfig = {},
-	postSuccessHandler = null;
+    postSuccessHandler = null;
 
 postData = {
     "prices" : [10, 20],
     "quantities" : [1, 2]
 };
+
 
 postConfig = {
     url:'http://localhost:3000/bill',

@@ -1,6 +1,10 @@
 const express = require('express')
+const bodyParser = require('body-parser');
 const app = express()
 const port = 3000
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -12,9 +16,9 @@ app.get('/id', (req, res) => {
 
 app.post('/bill', (req, res) => {
   res.setHeader('Content-Type', 'application/json');
-  
-  console.log(req.body)
-  res.send(req.body)
+  requestAsJson = JSON.stringify(req.body);
+  console.log(requestAsJson)
+  res.send(requestAsJson)
 })
 
 app.listen(port, () => {
