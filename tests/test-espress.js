@@ -3,20 +3,40 @@ var request = require('request'),
 	postConfig = {},
     postSuccessHandler = null;
 
-postData = {
-    "prices" : [10, 20],
-    "quantities" : [1, 2]
-};
+function testBillRequest(testMessage, postData) {
+    postConfig = {
+        url:'http://localhost:3000/bill',
+        form: postData
+    };
+    
+    postSuccessHandler = function (err, httpResponse, body) {
+        console.log(testMessage + ": \n" + body);
+    };
+    
+    //make the POST request
+    request.post(postConfig, postSuccessHandler);
+}
 
+testBillRequest(
+    "Bill - Test de succès",
+    {
+        "prices" : [10, 20],
+        "quantities" : [1, 2]
+    }
+);
 
-postConfig = {
-    url:'http://localhost:3000/bill',
-    form: postData
-};
+testBillRequest(
+    "Bill - Test d'échec - prices et quantitites de longueurs différentes",
+    {
+        "prices" : [10, 20, 30],
+        "quantities" : [1, 2]
+    }
+);
 
-postSuccessHandler = function (err, httpResponse, body) {
-	console.log('JSON response from the server: ' + body);
-};
-
-//make the POST request
-request.post(postConfig, postSuccessHandler);
+testBillRequest(
+    "Bill - Test d'échec - valeur non numérique",
+    {
+        "prices" : [10, "alpha"],
+        "quantities" : [1, 2]
+    }
+);
