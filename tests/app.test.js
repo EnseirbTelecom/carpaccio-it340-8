@@ -16,7 +16,44 @@ function testBillRequest (postData) {
   return request(postConfig)
 }
 
-test('Bill - Total is equal to 50.', async () => {
+test('Get - Welcoming message.', async () => {
+  expect.assertions(1)
+  let answerValue
+  const getConfig = {
+    uri: 'http://localhost:3000/',
+    headers: {
+      'User-Agent': 'Request-Promise'
+    }
+  }
+  await request(getConfig)
+    .then(data => {
+      answerValue = data
+    }).catch(err => {
+      console.log(err)
+    })
+  expect(answerValue).toBe("Bienvenue sur l'application carpaccio de la dream team !")
+})
+
+test('Get - Welcoming message.', async () => {
+  expect.assertions(1)
+  let answerValue
+  const getConfig = {
+    uri: 'http://localhost:3000/id',
+    qs: {},
+    headers: {
+      'User-Agent': 'Request-Promise'
+    }
+  }
+  await request(getConfig)
+    .then(data => {
+      answerValue = JSON.parse(data).id
+    }).catch(err => {
+      console.log(err)
+    })
+  expect(answerValue).toBe('carpaccio-it340-8')
+})
+
+test('Bill: Total is equal to 50.', async () => {
   expect.assertions(1)
   let answerValue
   await testBillRequest(
@@ -32,7 +69,7 @@ test('Bill - Total is equal to 50.', async () => {
   expect(answerValue).toBe(50)
 })
 
-test('computeTotal: No prices nor quantities.', async () => {
+test('Bill: No prices nor quantities.', async () => {
   expect.assertions(1)
   let answerValue
   await testBillRequest(
@@ -48,7 +85,7 @@ test('computeTotal: No prices nor quantities.', async () => {
   expect(answerValue).toBe(0)
 })
 
-test('computeTotal: Diverging number of prices and quantities.', async () => {
+test('Bill: Diverging number of prices and quantities.', async () => {
   expect.assertions(1)
   let answerValue
   await testBillRequest(
@@ -64,7 +101,7 @@ test('computeTotal: Diverging number of prices and quantities.', async () => {
   expect(answerValue).toBe('Il doit y avoir autant de prix que de quantités.')
 })
 
-test('computeTotal: Quantities missing.', async () => {
+test('Bill: Quantities missing.', async () => {
   expect.assertions(1)
   let answerValue
   await testBillRequest(
@@ -78,7 +115,7 @@ test('computeTotal: Quantities missing.', async () => {
   expect(answerValue).toBe('Les prix et quantités sont obligatoires.')
 })
 
-test('computeTotal: Not numerical prices.', async () => {
+test('Bill: Not numerical prices.', async () => {
   expect.assertions(1)
   let answerValue
   await testBillRequest(
