@@ -3,3 +3,8 @@ package-lock.json
 
 # stryker temp files
 .stryker-tmp
+reports
+
+#jest files
+coverage
+
