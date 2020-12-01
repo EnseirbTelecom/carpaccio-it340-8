@@ -1,5 +1,4 @@
 node_modules/
-package-lock.json
 
 # stryker temp files
 .stryker-tmp/
