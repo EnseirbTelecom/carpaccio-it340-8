@@ -3,12 +3,14 @@
     "@stryker-mutator/core": "^4.1.2",
     "@stryker-mutator/jest-runner": "^4.1.2",
     "jest": "^26.6.3",
-    "standard": "^16.0.3"
+    "standard": "^16.0.3",
+    "supertest": "^6.0.1"
   },
   "scripts": {
     "start": "standard --fix && node src/app.js",
     "test": "standard --fix && jest --coverage",
-    "mutation": "standard --fix && stryker run"
+    "mutation": "standard --fix && stryker run",
+    "clean": "rm -rf coverage/ && rm -rf reports/ && rm -rf .stryker-tmp/"
   },
   "repository": {
     "type": "git",
