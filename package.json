@@ -25,6 +25,11 @@
     "express": "^4.17.1",
     "request-promise-native": "^1.0.9"
   },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/"
+    ]
+  },
   "standard": {
     "ignore": [
       "/reports/**/*.js",
