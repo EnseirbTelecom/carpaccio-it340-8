@@ -3,14 +3,14 @@
 require('jest')
 
 const request = require('supertest')
-const server = require('../src/app')
+const app = require('../src/app')
 
 /* TESTS DE VALIDATION */
 
 describe('GET /', () => {
   it('Get a welcoming message.', async () => {
     expect.assertions(2)
-    const res = await request(server)
+    const res = await request(app)
       .get('/')
       .send()
     expect(res.statusCode).toEqual(200)
@@ -21,7 +21,7 @@ describe('GET /', () => {
 describe('GET /id', () => {
   it('Get the project id.', async () => {
     expect.assertions(2)
-    const res = await request(server)
+    const res = await request(app)
       .get('/id')
       .send()
     expect(res.statusCode).toEqual(200)
@@ -30,22 +30,38 @@ describe('GET /id', () => {
 })
 
 function testBillRequest (postData) {
-  return request(server)
+  return request(app)
     .post('/bill')
     .send(postData)
 }
 
 describe('POST /bill', () => {
-  it('Total is equal to 50.', async () => {
+  it('Total is equal to 62.5.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
       {
         prices: [10, 20],
-        quantities: [1, 2]
+        quantities: [1, 2],
+        country: 'IT'
       }
     )
     expect(res.statusCode).toEqual(200)
-    expect(res.body.total).toBe(50)
+    expect(res.body.total).toBe(62.5)
+  })
+})
+
+describe('POST /bill', () => {
+  it('Total is equal to 117.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [2, 4],
+        country: 'FI'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.total).toBe(117)
   })
 })
 
@@ -55,7 +71,8 @@ describe('POST /bill', () => {
     const res = await testBillRequest(
       {
         prices: [],
-        quantities: []
+        quantities: [],
+        country: 'IT'
       }
     )
     expect(res.statusCode).toEqual(200)
@@ -69,7 +86,8 @@ describe('POST /bill', () => {
     const res = await testBillRequest(
       {
         prices: [10, 20, 30],
-        quantities: [1, 2]
+        quantities: [1, 2],
+        country: 'IT'
       }
     )
     expect(res.statusCode).toEqual(200)
@@ -82,11 +100,12 @@ describe('POST /bill', () => {
     expect.assertions(2)
     const res = await testBillRequest(
       {
-        prices: [10, 20]
+        prices: [10, 20],
+        country: 'IT'
       }
     )
     expect(res.statusCode).toEqual(200)
-    expect(res.body.event).toBe('Les prix et quantités sont obligatoires.')
+    expect(res.body.event).toBe('Les prix, quantités et pays sont obligatoires.')
   })
 })
 
@@ -96,10 +115,40 @@ describe('POST /bill', () => {
     const res = await testBillRequest(
       {
         prices: [10, 'Test'],
-        quantities: [1, 2]
+        quantities: [1, 2],
+        country: 'IT'
       }
     )
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe('Les prix et quantités doivent être des nombres.')
+  })
+})
+
+describe('POST /bill', () => {
+  it('No country.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [1, 2]
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.event).toBe('Les prix, quantités et pays sont obligatoires.')
+  })
+})
+
+describe('POST /bill', () => {
+  it('Unknown country.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [1, 2],
+        country: 'ZZ'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.event).toBe("Ce pays n'est pas reconnu.")
   })
 })

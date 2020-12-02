@@ -14,9 +14,7 @@ app.get('/id', (request, result) => {
 })
 
 app.post('/bill', (request, result) => {
-  result.send(new Bill().getBill(request.body.prices, request.body.quantities))
+  result.send(new Bill().getBill(request.body.prices, request.body.quantities, request.body.country))
 })
 
-const server = app
-
-module.exports = server
+module.exports = app
