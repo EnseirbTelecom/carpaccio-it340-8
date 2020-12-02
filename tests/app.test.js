@@ -2,7 +2,6 @@
 
 require('jest')
 
-// const request = require('request-promise-native')
 const request = require('supertest')
 const server = require('../src/app')
 
