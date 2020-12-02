@@ -7,7 +7,7 @@
     "supertest": "^6.0.1"
   },
   "scripts": {
-    "start": "standard --fix && node src/app.js",
+    "start": "standard --fix && node src/server.js",
     "test": "standard --fix && jest --coverage",
     "mutation": "standard --fix && stryker run",
     "clean": "rm -rf coverage/ && rm -rf reports/ && rm -rf .stryker-tmp/"
