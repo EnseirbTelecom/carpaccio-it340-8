@@ -14,7 +14,7 @@ app.get('/id', (request, result) => {
 })
 
 app.post('/bill', (request, result) => {
-  result.send(new Bill().getBill(request.body.prices, request.body.quantities, request.body.country))
+  result.send(new Bill().getBill(request.body))
 })
 
 module.exports = app

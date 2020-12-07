@@ -1,4 +1,4 @@
-const VAT = {
+const countriesVAT = {
   DE: {
     country: 'Germany',
     tax: 20
@@ -113,4 +113,4 @@ const VAT = {
   }
 }
 
-module.exports.VAT = VAT
+module.exports.countriesVAT = countriesVAT

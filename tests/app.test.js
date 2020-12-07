@@ -48,9 +48,7 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.total).toBe(62.5)
   })
-})
 
-describe('POST /bill', () => {
   it('Total is equal to 117.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -63,9 +61,63 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.total).toBe(117)
   })
-})
 
-describe('POST /bill', () => {
+  it('Total with no discount is equal to 375.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [10, 10],
+        country: 'IT',
+        discount: 'NO_DISCOUNT'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.total).toBe(375)
+  })
+
+  it('Total with fixed discount is equal to 365.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [10, 10],
+        country: 'IT',
+        discount: 'FIXED_DISCOUNT'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.total).toBe(365)
+  })
+
+  it('Total with flat discount is equal to 262.5.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [10, 10],
+        country: 'IT',
+        discount: 'FLAT_DISCOUNT'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.total).toBe(262.5)
+  })
+
+  it('Total with flat discount is equal to 3637.5.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [100, 100],
+        country: 'IT',
+        discount: 'PROGRESSIVE_DISCOUNT'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.total).toBe(3637.5)
+  })
+
   it('No prices nor quantities.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -78,9 +130,7 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.total).toBe(0)
   })
-})
 
-describe('POST /bill', () => {
   it('Diverging number of prices and quantities.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -93,9 +143,7 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe('Il doit y avoir autant de prix que de quantités.')
   })
-})
 
-describe('POST /bill', () => {
   it('Quantities missing.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -107,9 +155,7 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe('Les prix, quantités et pays sont obligatoires.')
   })
-})
 
-describe('POST /bill', () => {
   it('Not numerical prices.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -122,9 +168,7 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe('Les prix et quantités doivent être des nombres.')
   })
-})
 
-describe('POST /bill', () => {
   it('No country.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
@@ -136,10 +180,8 @@ describe('POST /bill', () => {
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe('Les prix, quantités et pays sont obligatoires.')
   })
-})
 
-describe('POST /bill', () => {
-  it('Unknown country.', async () => {
+  it('Invalid country code.', async () => {
     expect.assertions(2)
     const res = await testBillRequest(
       {
@@ -150,5 +192,19 @@ describe('POST /bill', () => {
     )
     expect(res.statusCode).toEqual(200)
     expect(res.body.event).toBe("Ce pays n'est pas reconnu.")
+  })
+
+  it('Invalid discount code.', async () => {
+    expect.assertions(2)
+    const res = await testBillRequest(
+      {
+        prices: [10, 20],
+        quantities: [1, 2],
+        country: 'IT',
+        discount: 'INVALID'
+      }
+    )
+    expect(res.statusCode).toEqual(200)
+    expect(res.body.event).toBe('Schéma de réduction non reconnu.')
   })
 })

@@ -1,10 +1,15 @@
-const { VAT } = require('./data.js')
+const { countriesVAT } = require('./countriesVAT.js')
+const { Discount } = require('./discount.js')
 
 class Bill {
-  getBill (prices, quantities, country) {
+  constructor () {
+    this.discount = new Discount()
+  }
+
+  getBill (request) {
     let answer
     try {
-      answer = this.computeTotal(prices, quantities, country)
+      answer = this.computeTotal(request)
     } catch (error) {
       answer = this.handleError(error)
     }
@@ -15,9 +20,14 @@ class Bill {
     return !isNaN(Number(element))
   }
 
-  computeTotal (prices, quantities, country) {
+  computeTotal (request) {
+    const prices = request.prices
+    const quantities = request.quantities
+    const country = request.country
+    const discountType = request.discount ? request.discount : 'NO_DISCOUNT'
+
     let computedTotal = 0
-    const countryVAT = VAT[country]
+    const countryVAT = countriesVAT[country]
 
     if (!prices || !quantities || !country) {
       throw new Error('Les prix, quantités et pays sont obligatoires.')
@@ -39,6 +49,12 @@ class Bill {
 
     computedTotal += this.computeVAT(computedTotal, countryVAT.tax)
 
+    const computedDiscount = this.discount.getDiscount(computedTotal, discountType)
+    if (computedDiscount.event) {
+      throw new Error(computedDiscount.event)
+    }
+    computedTotal -= computedDiscount.discountValue
+
     return { total: computedTotal }
   }
 
@@ -51,7 +67,7 @@ class Bill {
 
   handleError (error) {
     return {
-      event: error.message ? error.message : 'An error occured.'
+      event: error.message ? error.message : 'Une erreur est apparue lors du traitement de la requête.'
     }
   }
 }

@@ -2,10 +2,10 @@
 
 require('jest')
 
-const { VAT } = require('../src/data.js')
+const { countriesVAT } = require('../src/countriesVAT.js')
 
-test('data contains the right values', () => {
-  expect(VAT).toStrictEqual({
+test('Countries VAT contains the right values', () => {
+  expect(countriesVAT).toStrictEqual({
     DE: {
       country: 'Germany',
       tax: 20
