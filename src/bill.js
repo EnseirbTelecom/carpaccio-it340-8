@@ -1,15 +1,17 @@
 const { countriesVAT } = require('./countriesVAT.js')
 const { Discount } = require('./discount.js')
+const { CurrencyConversion } = require('./currencyConversion.js')
 
 class Bill {
   constructor () {
     this.discount = new Discount()
+    this.currencyConversion = new CurrencyConversion()
   }
 
-  getBill (request) {
+  async getBill (request) {
     let answer
     try {
-      answer = this.computeTotal(request)
+      answer = await this.computeTotal(request)
     } catch (error) {
       answer = this.handleError(error)
     }
@@ -20,11 +22,12 @@ class Bill {
     return !isNaN(Number(element))
   }
 
-  computeTotal (request) {
+  async computeTotal (request) {
     const prices = request.prices
     const quantities = request.quantities
     const country = request.country
     const discountType = request.discount ? request.discount : 'NO_DISCOUNT'
+    const currency = request.currency
 
     let computedTotal = 0
     const countryVAT = countriesVAT[country]
@@ -54,6 +57,14 @@ class Bill {
       throw new Error(computedDiscount.event)
     }
     computedTotal -= computedDiscount.discountValue
+
+    if (currency) {
+      const convertedTotal = await this.currencyConversion.getConvertedValue(computedTotal, currency)
+      if (convertedTotal.event) {
+        throw new Error(convertedTotal.event)
+      }
+      computedTotal = convertedTotal.convertedTotal
+    }
 
     return { total: computedTotal }
   }

@@ -124,18 +124,12 @@ describe('Function computeProgressiveDiscount()', () => {
 describe('Function handleError()', () => {
   test('Error with a message.', () => {
     const discount = new Discount()
-    const log = console.log
-    console.log = () => {}
     expect(discount.handleError(new Error('Test')).event).toBe('Test')
-    console.log = log
   })
 
   test('Error without a message.', () => {
     const discount = new Discount()
-    const log = console.log
-    console.log = () => {}
     expect(discount.handleError(new Error()).event).toBe('Une erreur est apparue lors du traitement de la requête.')
-    console.log = log
   })
 })
 
@@ -194,11 +188,8 @@ describe('Function getDiscount()', () => {
       totalPrice: 100,
       discountType: 'FLAT_DISCOUNT'
     }
-    const log = console.log
-    console.log = () => {}
     expect(discount.getDiscount(data.totalPrice, data.discountType).event).toBeUndefined()
     expect(discount.getDiscount(data.totalPrice, data.discountType).discountValue).toBe(30)
-    console.log = log
   })
 
   test('Unsuccessful case.', () => {
@@ -207,10 +198,7 @@ describe('Function getDiscount()', () => {
       totalPrice: 100,
       discountType: 'TEST'
     }
-    const log = console.log
-    console.log = () => {}
     expect(discount.getDiscount(data.totalPrice, data.discountType).discountValue).toBeUndefined()
     expect(discount.getDiscount(data.totalPrice, data.discountType).event).toBe('Schéma de réduction non reconnu.')
-    console.log = log
   })
 })

@@ -13,8 +13,9 @@ app.get('/id', (request, result) => {
   result.send({ id: 'carpaccio-it340-8' })
 })
 
-app.post('/bill', (request, result) => {
-  result.send(new Bill().getBill(request.body))
+app.post('/bill', async (request, result) => {
+  const bill = await new Bill().getBill(request.body)
+  result.send(bill)
 })
 
 module.exports = app
