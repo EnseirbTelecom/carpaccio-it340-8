@@ -7,9 +7,10 @@
     "supertest": "^6.0.1"
   },
   "scripts": {
-    "start": "standard --fix && node src/server.js",
-    "test": "standard --fix && jest --coverage",
-    "mutation": "standard --fix && stryker run",
+    "start": "node src/server.js",
+    "test": "jest --coverage",
+    "mutation": "stryker run",
+    "lint": "standard --fix",
     "clean": "rm -rf coverage/ && rm -rf reports/ && rm -rf .stryker-tmp/"
   },
   "repository": {
