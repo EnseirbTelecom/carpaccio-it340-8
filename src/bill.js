@@ -8,6 +8,10 @@ class Bill {
     this.currencyConversion = new CurrencyConversion()
   }
 
+  setCurrencyConversion (currencyConversion) {
+    this.currencyConversion = currencyConversion
+  }
+
   async getBill (request) {
     let answer
     try {

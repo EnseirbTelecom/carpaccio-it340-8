@@ -89,47 +89,58 @@ describe('Function computeCurrencyConversion()', () => {
 })
 
 describe('Function getConversionRate()', () => {
-  test('EUR → KRW rate is over 1000', async () => {
+  const conversionRates = {
+    CAD: 1.5487,
+    KRW: 1325.32,
+    EUR: 1
+  }
+
+  test('KRW rate is extracted from the API mock', () => {
     const currencyConversion = new CurrencyConversion()
-    expect.assertions(1)
-    const rate = await currencyConversion.getConversionRate('KRW', 'EUR')
-    expect(rate > 1000).toBeTruthy()
+    const rate = currencyConversion.getConversionRate(conversionRates, 'KRW')
+    expect(rate).toBe(1325.32)
   })
 
-  test('EUR → CAD rate is over 1 and below 2', async () => {
+  test('CAD rate is extracted from the API mock', () => {
     const currencyConversion = new CurrencyConversion()
-    expect.assertions(1)
-    const rate = await currencyConversion.getConversionRate('CAD', 'EUR')
-    expect(rate > 1 && rate < 2).toBeTruthy()
+    const rate = currencyConversion.getConversionRate(conversionRates, 'CAD')
+    expect(rate).toBe(1.5487)
   })
 
-  test('CAD → EUR rate is over 0 and below 1', async () => {
+  test('EUR rate is extracted from the API mock', () => {
     const currencyConversion = new CurrencyConversion()
-    expect.assertions(1)
-    const rate = await currencyConversion.getConversionRate('EUR', 'CAD')
-    expect(rate > 0 && rate < 1).toBeTruthy()
+    const rate = currencyConversion.getConversionRate(conversionRates, 'EUR')
+    expect(rate).toBe(1)
   })
 
-  test('EUR → CAD rate is over 1 and below 2 (with only currency converted to)', async () => {
+  test('ZZZ is not a valid code', () => {
     const currencyConversion = new CurrencyConversion()
-    expect.assertions(1)
-    const rate = await currencyConversion.getConversionRate('CAD')
-    expect(rate > 1 && rate < 2).toBeTruthy()
-  })
-
-  test('ZZZ is not a valid code', async () => {
-    const currencyConversion = new CurrencyConversion()
-    expect.assertions(1)
-    try {
-      await currencyConversion.getConversionRate('ZZZ')
-    } catch (error) {
-      expect(error.message).toMatch("Le code 'ZZZ' n'est pas reconnu.")
-    }
+    expect(() => { currencyConversion.getConversionRate(conversionRates, 'ZZZ') })
+      .toThrow("Le code 'ZZZ' n'est pas reconnu.")
   })
 })
 
 describe('Function getConvertedValue()', () => {
-  test('Successful case.', async () => {
+  const conversionRates = {
+    CAD: 1.5487,
+    KRW: 1325.32,
+    EUR: 1
+  }
+  const getConversionRate = jest.fn((conversionRates, currencyToConvertTo) => conversionRates[currencyToConvertTo])
+  const getConvertedValue = jest.fn((totalPrice, currencyToConvertTo, currencyToConvertFrom) => 1)
+  test('Test', () => {
+    expect.assertions(2)
+    expect(getConversionRate(conversionRates, 'CAD')).toBe(1.5487)
+    expect(getConversionRate).toHaveBeenCalledWith(conversionRates, 'CAD')
+  })
+
+  test('Test2', () => {
+    expect.assertions(2)
+    expect(getConvertedValue(1000, 'CAD', 'EUR')).toBe(1)
+    expect(getConvertedValue).toHaveBeenCalledWith(1000, 'CAD', 'EUR')
+  })
+
+  /* test('Successful case.', async () => {
     const currencyConversion = new CurrencyConversion()
     const data = {
       totalPrice: 100,
@@ -172,5 +183,5 @@ describe('Function getConvertedValue()', () => {
       .toBeUndefined()
     expect(convertedTotal.event)
       .toBe("Base 'ZZZ' is not supported.")
-  })
+  }) */
 })

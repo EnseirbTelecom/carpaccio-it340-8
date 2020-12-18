@@ -6,6 +6,22 @@ const { Bill } = require('../src/bill.js')
 
 /* TESTS UNITAIRES */
 
+class MockValidCurrencyConversion {
+  async getConvertedValue (totalPrice, currencyToConvertTo, currencyToConvertFrom) {
+    return {
+      convertedTotal: 1000
+    }
+  }
+}
+
+class MockErrorCurrencyConversion {
+  async getConvertedValue (totalPrice, currencyToConvertTo, currencyToConvertFrom) {
+    return {
+      event: 'Error'
+    }
+  }
+}
+
 describe('Function computeVAT()', () => {
   test('VAT is equal to 25', () => {
     const bill = new Bill()
@@ -120,6 +136,19 @@ describe('Function computeTotal()', () => {
     expect(computedTotal.total > 62.5 && computedTotal.total < 125).toBeTruthy()
   })
 
+  test('Total is 1000 with fake CurrencyConversion.', async () => {
+    const bill = new Bill()
+    bill.setCurrencyConversion(new MockValidCurrencyConversion())
+    const data = {
+      prices: [10, 20],
+      quantities: [1, 2],
+      country: 'IT',
+      currency: 'CAD'
+    }
+    const computedTotal = await bill.computeTotal(data)
+    expect(computedTotal.total).toBe(1000)
+  })
+
   test('Total with progressive discount is lower than 7275 but higher than 3637.5 in CAD.', async () => {
     const bill = new Bill()
     const data = {
@@ -131,6 +160,24 @@ describe('Function computeTotal()', () => {
     }
     const computedTotal = await bill.computeTotal(data)
     expect(computedTotal.total > 3637.5 && 3637.5 < 7275).toBeTruthy()
+  })
+
+  test('Handled error from fake CurrencyConversion.', async () => {
+    const bill = new Bill()
+    bill.setCurrencyConversion(new MockErrorCurrencyConversion())
+    const data = {
+      prices: [10, 20],
+      quantities: [1, 2],
+      country: 'IT',
+      discount: 'PROGRESSIVE_DISCOUNT',
+      currency: 'CAD'
+    }
+    expect.assertions(1)
+    try {
+      await bill.computeTotal(data)
+    } catch (error) {
+      expect(error.message).toMatch('Error')
+    }
   })
 
   test('Invalid discount code.', async () => {
