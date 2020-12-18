@@ -19,11 +19,14 @@ jobs:
         node-version: [10.x, 12.x, 14.x]
 
     steps:
-    - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@latest
       with:
         node-version: ${{ matrix.node-version }}
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
     - run: npm ci
+    - run: npm run lint
     - run: npm run test
     - run: npm run mutation
