@@ -19,7 +19,8 @@ class CurrencyConversion {
   async getConvertedValue (totalPrice, currencyToConvertTo, currencyToConvertFrom) {
     let answer
     try {
-      const conversionRate = await this.getConversionRate(currencyToConvertTo, currencyToConvertFrom)
+      const conversionRates = await this.getCurrencyRatesFromAPI(currencyToConvertFrom)
+      const conversionRate = this.getConversionRate(conversionRates, currencyToConvertTo)
       answer = this.computeCurrencyConversion(totalPrice, conversionRate)
     } catch (error) {
       answer = this.handleError(error)
@@ -33,9 +34,8 @@ class CurrencyConversion {
     }
   }
 
-  async getConversionRate (currencyToConvertTo, currencyToConvertFrom) {
-    const rates = await this.getCurrencyRatesFromAPI(currencyToConvertFrom)
-    const conversionRate = rates[currencyToConvertTo]
+  getConversionRate (conversionRates, currencyToConvertTo) {
+    const conversionRate = conversionRates[currencyToConvertTo]
     if (!conversionRate) {
       throw new Error("Le code '" + currencyToConvertTo + "' n'est pas reconnu.")
     }
