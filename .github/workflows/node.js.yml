@@ -37,7 +37,7 @@ jobs:
           draft: false
           prerelease: false
     steps:
-        run: npm ci
-        run: npm run lint
-        run: npm run test
-        run: npm run mutation
+        - run: npm ci
+          run: npm run lint
+          run: npm run test
+          run: npm run mutation
