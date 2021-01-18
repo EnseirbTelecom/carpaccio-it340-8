@@ -37,6 +37,7 @@ jobs:
           draft: false
           prerelease: false
         run: npm install
+          shell: bash
           working-directory: carpaccio-it340-8 
         run: npm ci
           working-directory: carpaccio-it340-8
