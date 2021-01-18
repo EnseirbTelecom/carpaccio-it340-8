@@ -32,6 +32,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - run: npm init
       - run: npm install
       - run: npm ci
       - run: npm run lint
