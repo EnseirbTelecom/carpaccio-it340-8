@@ -36,10 +36,14 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-      - name: npm install, build, and test
-        run: |
-          npm install
-          npm ci
-          npm run lint
-          npm run test
-          npm run mutation
+        run: npm install
+          working-directory: carpaccio-it340-8
+        
+        run:  npm ci
+          working-directory: carpaccio-it340-8
+        run:  npm run lint
+          working-directory: carpaccio-it340-8
+        run:  npm run test
+          working-directory: carpaccio-it340-8
+        run:  npm run mutation
+          working-directory: carpaccio-it340-8
