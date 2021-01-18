@@ -32,7 +32,4 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-    - run: npm ci
-    - run: npm run lint
-    - run: npm run test
-    - run: npm run mutation
+
