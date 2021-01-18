@@ -37,7 +37,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - script: |
+      - run: |
           npm run build
           npm ci
           npm run lint
