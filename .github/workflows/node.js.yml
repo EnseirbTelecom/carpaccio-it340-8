@@ -36,5 +36,10 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-
-
+      - name: npm install, build, and test
+          run: |
+            npm install
+            npm ci
+            npm run lint
+            npm run test
+            npm run mutation
