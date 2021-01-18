@@ -8,5 +8,8 @@
   ],
   "testRunner": "jest",
   "coverageAnalysis": "off",
-  "files": [ "src/*.js", "tests/*.js", "!src/server.js" ]
+  "files": [ "src/*.js", "tests/*.js", "!src/server.js" ],
+  "jest" : {
+    "enableFindRelatedTests": false
+  }
 }
