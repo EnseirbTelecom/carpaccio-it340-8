@@ -13,16 +13,11 @@ on:
 
 jobs:
   build:
-
+    name: Create Release
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [14.x]
-
     steps:
       - name: Checkout code
-        uses: actions/setup-node@v2
+        uses: actions/checkout@v2
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
