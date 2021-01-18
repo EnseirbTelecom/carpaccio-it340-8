@@ -16,18 +16,12 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x, 14.x]
+        node-version: [14.x]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run test
-    - run: npm run mutation
-    - name: Create Release
+      - name: Checkout code
+        uses: actions/setup-node@v2
+      - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -40,7 +34,4 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
+
