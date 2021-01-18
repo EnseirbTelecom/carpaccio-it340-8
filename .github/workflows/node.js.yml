@@ -23,6 +23,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/setup-node@v2
+      - run: npm install
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
+      - run: npm run mutation
       - name: Create Release
         uses: softprops/action-gh-release@v1
         env:
@@ -36,14 +41,5 @@ jobs:
             - Second Change
           draft: false
           prerelease: false
-        run: npm install
-          shell: bash
-          working-directory: carpaccio-it340-8 
-        run: npm ci
-          working-directory: carpaccio-it340-8
-        run: npm run lint
-          working-directory: carpaccio-it340-8
-        run: npm run test
-          working-directory: carpaccio-it340-8
-        run: npm run mutation
-          working-directory: carpaccio-it340-8
+
+
