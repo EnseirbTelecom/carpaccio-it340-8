@@ -38,11 +38,11 @@ jobs:
           prerelease: false
         run: npm install
           working-directory: carpaccio-it340-8 
-        run:  npm ci
+        run: npm ci
           working-directory: carpaccio-it340-8
-        run:  npm run lint
+        run: npm run lint
           working-directory: carpaccio-it340-8
-        run:  npm run test
+        run: npm run test
           working-directory: carpaccio-it340-8
-        run:  npm run mutation
+        run: npm run mutation
           working-directory: carpaccio-it340-8
