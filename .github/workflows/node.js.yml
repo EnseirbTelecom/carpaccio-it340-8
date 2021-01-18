@@ -33,6 +33,7 @@ jobs:
           release_name: Release ${{ github.ref }}
           draft: false
           prerelease: false
+      - run: npm install
       - run: npm ci
       - run: npm run lint
       - run: npm run test
