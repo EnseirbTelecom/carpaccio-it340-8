@@ -40,5 +40,12 @@
       "/reports/**/*.js",
       "/coverage/**/*.js"
     ]
+  },
+  "name": "carpaccio-it340-8",
+  "description": "Antoine Boulangé\r Balthazar Robin",
+  "version": "1.0.0",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
   }
 }
